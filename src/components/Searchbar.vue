@@ -19,7 +19,7 @@ import IconClose from './icons/IconClose.vue'
   </div>
   <!-- Error Message if there are no entries -->
   <div v-if="errorMsg" class="errorMsg">{{ errorMsg }}</div>
-  <div class="apiUsed">used api is {{ useLocalApi ? apiUrlLocal : apiUrl }}</div>
+  <div v-if="baseUrl" class="apiUsed">used api is {{ baseUrl }}</div>
 
   <!-- Resultlist -->
   <div v-if="showResults && data && data.results && !selectedResult" class="suggestions">
@@ -50,9 +50,11 @@ export default {
     return {
       searchInput: '',
       placeholder: 'Find yout favourite Charakter!',
+      baseUrl: "",
       apiUrlLocal: "https://localhost:1337",
-      apiUrl: "https://rickandmortyapi.com/api",
-      useLocalApi: new URLSearchParams(window.location.search).get("local") == 'true',
+      apiUrlAzure: "https://rickandmorty-net-api.azurewebsites.net",
+      apiUrlRemote: "https://rickandmortyapi.com/api",
+      api: new URLSearchParams(window.location.search).get("api"),
       debounceMilliseconds: 150,
       data: null,
       selectedResult: null,
@@ -63,7 +65,8 @@ export default {
   methods: {
     // loads data from rickandmorty api with axios
     async getData(name) {
-      var url = `${this.useLocalApi ? this.apiUrlLocal : this.apiUrl}/character`;
+
+      var url = `${this.baseUrl}/character`;
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.data = null;
@@ -113,9 +116,20 @@ export default {
       this.toggleShowResults(e.which === ENTER_KEYCODE || e.which === KEYCODE_UNDEFINED);
     },
   },
-  // created() {
-  //   this.getData();
-  // }
+  created() {
+    switch (this.api) {
+      case 'local':
+        this.baseUrl = this.apiUrlLocal;
+        break;
+      case 'azure':
+        this.baseUrl = this.apiUrlAzure;
+        break;
+      case 'remote':
+      default:
+        this.baseUrl = this.apiUrlRemote;
+        break;
+    }
+  }
 }
 </script>
 
