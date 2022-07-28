@@ -32,8 +32,5 @@ remote: apiUrlRemote
 
 
 ### Preview
- <img src="./ram.gif" align="center" width="450px"/>
- ****
-<video src="./ram.mov" controls="controls" style="max-width:450px;">
-</video>
+ <img src="./ram.gif" align="center" width="725px"/>
 ****
