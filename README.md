@@ -20,12 +20,13 @@ npm run dev
 npm run build
 ```
 
-### Queryparameter for API-Change (local/remote)
+### Queryparameter for API-Change (local/remote/azure)
 ```sh
-?local=true 
+?api=azure 
 
-true: apiUrlLocal
-false: apiUrl
+local: apiUrlLocal
+azure: apiUrlAzure
+remote: apiUrlRemote
 ```
 
 ****
