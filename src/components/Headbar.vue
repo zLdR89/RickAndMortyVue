@@ -13,6 +13,7 @@ import IconRickAndMorty from './icons/IconRickAndMorty.vue'
             <h3>
                 simple API search with vite, vue and axios!
             </h3>
+
         </div>
     </div>
 </template>

@@ -20,4 +20,12 @@ npm run dev
 npm run build
 ```
 
-That's all!
+### Queryparameter for API-Change (local/remote)
+```sh
+?local=true 
+
+true: apiUrlLocal
+false: apiUrl
+```
+
+****

@@ -19,6 +19,8 @@ import IconClose from './icons/IconClose.vue'
   </div>
   <!-- Error Message if there are no entries -->
   <div v-if="errorMsg" class="errorMsg">{{ errorMsg }}</div>
+  <div class="apiUsed">used api is {{ useLocalApi ? apiUrlLocal : apiUrl }}</div>
+
   <!-- Resultlist -->
   <div v-if="showResults && data && data.results && !selectedResult" class="suggestions">
     <ul>
@@ -48,7 +50,9 @@ export default {
     return {
       searchInput: '',
       placeholder: 'Find yout favourite Charakter!',
-      charactersUrl: "https://rickandmortyapi.com/api/character",
+      apiUrlLocal: "https://localhost:1337",
+      apiUrl: "https://rickandmortyapi.com/api",
+      useLocalApi: new URLSearchParams(window.location.search).get("local") == 'true',
       debounceMilliseconds: 150,
       data: null,
       selectedResult: null,
@@ -59,20 +63,22 @@ export default {
   methods: {
     // loads data from rickandmorty api with axios
     async getData(name) {
+      var url = `${this.useLocalApi ? this.apiUrlLocal : this.apiUrl}/character`;
       clearTimeout(this.timeout);
       this.timeout = setTimeout(() => {
         this.data = null;
         this.autocomplete = null;
         this.errorMsg = "";
-        const charactersPromise = axios.get(this.charactersUrl, {
+        const resultPromise = axios.get(url, {
           params: {
             name: name
           }
         });
-        Promise.all([charactersPromise]).then(response => {
+        Promise.all([resultPromise]).then(response => {
           this.data = response[0].data;
           this.autocomplete = this.data.results.map(item => item.name).filter((x, i, a) => a.indexOf(x) == i);
         }).catch(error => {
+          console.log(error);
           this.data = null;
           this.errorMsg = "Could not find any suggestions!";
           this.closeResult();
@@ -124,7 +130,7 @@ export default {
   /* flex: 100%; */
   padding: 2px 0 0 20px;
   place-items: top;
-  margin: 20px 0;
+  margin: 30px 0;
 }
 
 .closeIcon {
@@ -144,6 +150,14 @@ export default {
 .errorMsg {
   color: red;
   text-align: center;
+}
+
+.apiUsed {
+  color: white;
+  opacity: 0.5;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .suggestions {
